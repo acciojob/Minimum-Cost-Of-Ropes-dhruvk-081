@@ -1,17 +1,45 @@
 function minimumCost() {
     
-    var res = 0;
-    var cost = 0;
-    var inputArray = document.getElementById("inputArr").value;
-    inputArray = inputArray.split(',').map(Number);
-    for (let i = 0; i < inputArray.length - 1; i += 0) {
-        if (inputArray.length == 0) break;
-		// sort by decreasing order
-        inputArray = inputArray.sort((a,b) => b-a);
-        res = inputArray.pop() + inputArray.pop();
-        cost += res;
-		// adding res to arrayy
-        inputArray[inputArray.length] = res;   
-    }  
-    document.getElementById("result").innerHTML = cost;
+    let n = arr.length;
+  if (n < 2) return 0;
+  
+  // Create a priority queue
+  let pq = new PriorityQueue();
+  for (let i = 0; i < n; i++) {
+    pq.enqueue(arr[i]);
+  }
+  
+  // Start connecting ropes
+  let totalCost = 0;
+  while (pq.size() > 1) {
+    let rope1 = pq.dequeue();
+    let rope2 = pq.dequeue();
+    let newRope = rope1 + rope2;
+    totalCost += newRope;
+    pq.enqueue(newRope);
+  }
+  
+  return totalCost;
+}
+
+class PriorityQueue {
+  constructor() {
+    this.items = [];
+  }
+  
+  enqueue(item) {
+    let i = 0;
+    while (i < this.items.length && item > this.items[i]) {
+      i++;
+    }
+    this.items.splice(i, 0, item);
+  }
+  
+  dequeue() {
+    return this.items.shift();
+  }
+  
+  size() {
+    return this.items.length;
+  }
 } 
